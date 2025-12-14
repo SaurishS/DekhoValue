@@ -5,6 +5,10 @@ import fs from "fs";
 import path from "path";
 import os from "os";
 
+// Allow longer timeout for Vercel (Hobby plan limit is 10s, Pro is 300s. We try to request more.)
+export const maxDuration = 60; 
+export const dynamic = 'force-dynamic';
+
 export async function POST(req: NextRequest) {
   try {
     const formData = await req.formData();
@@ -14,9 +18,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "No video file provided" }, { status: 400 });
     }
 
+    // Vercel Limit Check (4.5MB is the hard limit for serverless body)
+    if (file.size > 4.5 * 1024 * 1024) {
+       return NextResponse.json({ error: "Video too large for Vercel Demo. Please use a shorter/smaller clip (< 4.5MB)." }, { status: 413 });
+    }
+
     const apiKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY;
     if (!apiKey) {
-      return NextResponse.json({ error: "API Key missing" }, { status: 500 });
+      return NextResponse.json({ error: "API Key missing in server environment" }, { status: 500 });
     }
 
     // 1. Save file to temp directory
@@ -32,9 +41,14 @@ export async function POST(req: NextRequest) {
       displayName: "Insurance Video",
     });
 
-    // 3. Wait for processing
+    // 3. Wait for processing (Polling loop)
     let fileState = await fileManager.getFile(uploadResult.file.name);
+    let attempts = 0;
     while (fileState.state === "PROCESSING") {
+      attempts++;
+      if (attempts > 30) { // Timeout safety (approx 60s)
+          throw new Error("Video processing timed out on Google's side.");
+      }
       await new Promise((resolve) => setTimeout(resolve, 2000));
       fileState = await fileManager.getFile(uploadResult.file.name);
     }
@@ -97,6 +111,6 @@ export async function POST(req: NextRequest) {
 
   } catch (error: any) {
     console.error("Error processing video:", error);
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ error: error.message || "Internal Server Error" }, { status: 500 });
   }
 }
