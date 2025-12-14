@@ -3,10 +3,10 @@
 > **"Just Dekho and Value"**  
 > *Transforming Home Insurance from a 20-minute form into a 10-second video.*
 
-![DekhoValue Banner](https://via.placeholder.com/1200x600/2563eb/ffffff?text=DekhoValue+AI+Underwriter)
+![DekhoValue Banner](./public/banner.png)
 
 ## 🏆 Project Overview
-**DekhoValue** is a GenAI-powered web application built for the **AI Impact Summit India 2026 / GDG Hackathon**. It solves the biggest friction point in the Indian Home Insurance market: **Data Entry**.
+**DekhoValue** is a GenAI-powered web application built for the **GDG GenAI Hackathon Bhopal**. It solves the biggest friction point in the Indian Home Insurance market: **Data Entry**.
 
 Instead of filling out tedious forms listing every sofa, TV, and table, users simply **record a video** of their room. Our AI agent analyzes the footage, identifies assets, estimates their market value in INR, and generates an instant insurance quote.
 
@@ -64,13 +64,32 @@ Instead of filling out tedious forms listing every sofa, TV, and table, users si
 3.  **Analysis:** The LLM identifies objects, assesses condition ("New", "Used"), and estimates price based on its internal knowledge base.
 4.  **Output:** A structured JSON response is returned and rendered as a beautiful UI with a calculated premium.
 
-## 🔮 Future Roadmap
-*   **Fraud Detection:** Geo-spatial fingerprinting to ensure videos are recorded at the insured address.
-*   **Receipt Reconstruction:** AI agent that scans your email/SMS to find proof of purchase for identified items.
-*   **AR Overlay:** Real-time price tags on items while scanning.
+## 🔮 Future Roadmap (Post-Hackathon)
 
-## 👥 Team
-*   **[Your Name]** - Lead Developer & Architect
+The following features are planned for the next release to turn this prototype into a production-ready application:
+
+1.  **🔐 Real Authentication (Supabase/Firebase)**
+    *   Replace the demo simulation with real OAuth (Google Sign-In).
+    *   Implement persistent user sessions using JWT.
+
+2.  **👤 Dynamic Profile & Signup**
+    *   Full sign-up flow with email/password validation.
+    *   Profile dashboard showing user details and a "Log Out" function.
+
+3.  **📜 Quote History & Persistence**
+    *   Save every scan result to a database (PostgreSQL/Supabase).
+    *   "Previous Quotes" dashboard that persists across sessions and devices.
+    *   Functional "View All" modal to access full history.
+
+4.  **🛡️ Enhanced Validation & Security**
+    *   Strict email regex validation.
+    *   Geo-spatial fingerprinting (fraud detection) to verify scan location.
+
+5.  **💳 Integrated Payment Gateway**
+    *   Direct API integration with insurers for seamless checkout without redirection.
+
+## 👥 Team Galactic 404
+*   **Saurish Sagar** - Lead Developer & Architect
 
 ---
 *Built with ❤️ for GDG GenAI Hackathon 2025*
